@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR Generator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>CSR Generator</h1>
+            <p class="subtitle">Generez des Certificate Signing Requests pour votre infrastructure PKI</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="error-container" class="alert alert-error" hidden></div>
+
+            <form id="csr-form">
+                <fieldset>
+                    <legend>Informations du sujet</legend>
+
+                    <div class="form-group">
+                        <label for="common_name">Common Name (CN) <span class="required">*</span></label>
+                        <input type="text" id="common_name" name="common_name" required maxlength="255"
+                               placeholder="ex: example.com">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="organization">Organisation (O)</label>
+                            <input type="text" id="organization" name="organization" maxlength="255"
+                                   placeholder="ex: Acme Corp">
+                        </div>
+                        <div class="form-group">
+                            <label for="organizational_unit">Unite organisationnelle (OU)</label>
+                            <input type="text" id="organizational_unit" name="organizational_unit" maxlength="255"
+                                   placeholder="ex: Departement IT">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="locality">Ville (L)</label>
+                            <input type="text" id="locality" name="locality" maxlength="255"
+                                   placeholder="ex: Paris">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">Region / Province (ST)</label>
+                            <input type="text" id="state" name="state" maxlength="255"
+                                   placeholder="ex: Ile-de-France">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country">Pays (C) <span class="required">*</span></label>
+                            <input type="text" id="country" name="country" required maxlength="2"
+                                   placeholder="ex: FR" pattern="[A-Za-z]{2}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adresse email</label>
+                            <input type="email" id="email" name="email"
+                                   placeholder="ex: admin@example.com">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Configuration de la cle</legend>
+                    <div class="form-group">
+                        <label for="key_size">Taille de la cle RSA <span class="required">*</span></label>
+                        <select id="key_size" name="key_size" required>
+                            <option value="2048" selected>2048 bits</option>
+                            <option value="4096">4096 bits</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Subject Alternative Names (SANs)</legend>
+
+                    <div class="san-section">
+                        <div class="san-header">
+                            <label>Noms DNS</label>
+                            <button type="button" class="btn btn-small" id="add-dns-btn">+ Ajouter un DNS</button>
+                        </div>
+                        <div id="san-dns-list" class="san-list"></div>
+                    </div>
+
+                    <div class="san-section">
+                        <div class="san-header">
+                            <label>Adresses IP</label>
+                            <button type="button" class="btn btn-small" id="add-ip-btn">+ Ajouter une IP</button>
+                        </div>
+                        <div id="san-ip-list" class="san-list"></div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <span class="btn-text">Generer le CSR</span>
+                        <span class="spinner" hidden></span>
+                    </button>
+                </div>
+            </form>
+
+            <section id="results-section" hidden>
+                <div class="alert alert-success">
+                    CSR genere avec succes ! Telechargez vos fichiers ci-dessous.
+                </div>
+
+                <div class="alert alert-warning">
+                    Conservez votre cle privee en lieu sur. Elle n'est pas stockee sur le serveur.
+                </div>
+
+                <div class="download-buttons">
+                    <button type="button" class="btn btn-download" id="download-csr-btn">
+                        Telecharger le CSR (.csr)
+                    </button>
+                    <button type="button" class="btn btn-download btn-key" id="download-key-btn">
+                        Telecharger la cle privee (.key)
+                    </button>
+                </div>
+
+                <div class="pem-section">
+                    <div class="pem-block">
+                        <label>CSR (PEM)</label>
+                        <textarea id="csr-output" readonly rows="10"></textarea>
+                    </div>
+                    <div class="pem-block">
+                        <label>Cle privee (PEM)</label>
+                        <textarea id="key-output" readonly rows="10"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="reset-btn">
+                        Generer un autre CSR
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>CSR Generator &mdash; Outil interne de generation de Certificate Signing Requests</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
