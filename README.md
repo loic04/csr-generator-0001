@@ -28,7 +28,7 @@ docker compose ps
 docker compose logs -f
 ```
 
-L'application est accessible sur **http://localhost:5000**
+L'application est accessible sur **http://localhost:8443**
 
 ## Arret
 
