@@ -1,6 +1,7 @@
 services:
   csr-generator:
     build: .
-    ports:
-      - "8443:5000"
+    network_mode: host
+    environment:
+      - PORT=8443
     restart: unless-stopped

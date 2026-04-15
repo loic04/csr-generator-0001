@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.pytho
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 8443
 
 RUN useradd --no-create-home appuser
 USER appuser
